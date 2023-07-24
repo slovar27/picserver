@@ -2,15 +2,31 @@ import os
 from flask import Flask, flash, request, redirect, url_for, send_file, render_template
 from werkzeug.utils import secure_filename
 
-import applib
+import applib, lib1, uuid
+
+
+def prp(msg):
+    #return
+    print(str(msg))
+    print(type(msg))
+    print(len(str(msg)))
 
 
 UPLOAD_FOLDER = 'uploads'
+# resized folder: resized
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 
 app = Flask(__name__)
+random_string = lib1.get_randon_hash()
+random_bytes = str.encode(random_string)
+app.secret_key = random_bytes
+
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+extpassword = uuid.uuid4().hex
+lib1.file_save_content("password.txt", extpassword)
+prp(extpassword)
 
 
 def allowed_file(filename):
@@ -22,6 +38,11 @@ def prp(msg):
     print(str(msg))
     print(type(msg))
     print(len(str(msg)))
+
+
+@app.route('/', methods=['GET', 'POST'])
+def main_route():
+    return "picserver"
 
 
 @app.route('/uploadsecretpath', methods=['GET', 'POST'])
